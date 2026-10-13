@@ -413,8 +413,21 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let result = str;
+  let n = iterations;
+  while (n) {
+    let start = '';
+    let end = '';
+    for (let i = 0; i < result.length; i += 2) {
+      start += result[i];
+      end += result[i + 1] ?? '';
+    }
+    result = start + end;
+    n -= 1;
+    if (result === str) n %= iterations - n;
+  }
+  return result;
 }
 
 /**
@@ -435,8 +448,24 @@ function shuffleChar(/* str, iterations */) {
  * 321321   => 322113
  *
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const arr = [];
+  for (let num = number; num > 0; num = Math.floor(num / 10))
+    arr.unshift(num % 10);
+
+  for (let i = arr.length - 2; i >= 0; i -= 1) {
+    if (arr[i] < arr[i + 1]) {
+      let swapIndex = arr.length - 1;
+      while (arr[swapIndex] <= arr[i]) swapIndex -= 1;
+
+      [arr[i], arr[swapIndex]] = [arr[swapIndex], arr[i]];
+
+      arr.push(...arr.splice(i + 1).reverse());
+      return arr.reduce((result, num) => result * 10 + num, 0);
+    }
+  }
+
+  return number;
 }
 
 module.exports = {
