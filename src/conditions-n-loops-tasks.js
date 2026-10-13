@@ -313,8 +313,30 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function spiralTurn(arr, size, startIndex, startNum) {
+  const result = arr;
+  if (size === 1) {
+    result[startIndex][startIndex] = startNum;
+  } else if (size) {
+    let num = startNum;
+    const maxNum = startNum + (size - 1) * 4;
+    const endIndex = startIndex + size - 1;
+    for (let i = startIndex; i < endIndex; i += 1) {
+      result[startIndex][i] = num;
+      result[i][endIndex] = num + size - 1;
+      result[endIndex][i + 1] = maxNum + startIndex - i - size;
+      result[i + 1][startIndex] = maxNum + startIndex - i - 1;
+      num += 1;
+    }
+    spiralTurn(result, size - 2, startIndex + 1, maxNum);
+  }
+  return result;
+}
+
+function getSpiralMatrix(size) {
+  const arr = new Array(size);
+  for (let i = 0; i < size; i += 1) arr[i] = new Array(size);
+  return spiralTurn(arr, size, 0, 1);
 }
 
 /**
@@ -332,8 +354,19 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const size = matrix.length;
+
+  const result = new Array(size);
+  for (let i = 0; i < size; i += 1) result[i] = new Array(size);
+
+  for (let i = 0, k = size - 1; i < size; i += 1, k -= 1) {
+    for (let j = 0; j < size; j += 1) {
+      result[j][k] = matrix[i][j];
+    }
+  }
+  Object.assign(matrix, result);
+  return matrix;
 }
 
 /**
@@ -350,8 +383,17 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const result = arr;
+  for (let i = 1; i < result.length; i += 1) {
+    const current = result[i];
+    let j = i - 1;
+    while (j >= 0 && result[j] > current) {
+      result[j + 1] = result[j];
+      j -= 1;
+    }
+    result[j + 1] = current;
+  }
 }
 
 /**
